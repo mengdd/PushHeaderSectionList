@@ -37,7 +37,11 @@ public class SectionListView extends ListView implements OnScrollListener
 		View getTopHeaderView(View convertView, int firstVisiblePosition,
 				ViewGroup parent);
 
-		int getTopHeaderState(int firstVisiblePosition);
+		int getTopHeaderState(int firstVisiblePosition, int headerHeight,
+				ListView listView);
+
+		int getNextSectionRelativePosition(int firstVisiblePosition,
+				ListView listView);
 	}
 
 	private View mTopHeaderView = null;
@@ -173,7 +177,8 @@ public class SectionListView extends ListView implements OnScrollListener
 		super.dispatchDraw(canvas);
 		if (isTopHeaderVisible && null != mTopHeaderView)
 		{
-			Log.i(TAG, "drawTopHeader: " + +mHeaderWidth + ", " + mHeaderHeight);
+			// Log.i(TAG, "drawTopHeader: " + +mHeaderHeight+ ", " +
+			// mHeaderHeight);
 			drawChild(canvas, mTopHeaderView, getDrawingTime());
 		}
 	}
@@ -185,7 +190,8 @@ public class SectionListView extends ListView implements OnScrollListener
 			return;
 		}
 		// get state
-		int state = mAdapter.getTopHeaderState(firstVisibleItem);
+		int state = mAdapter.getTopHeaderState(firstVisibleItem, mHeaderHeight,
+				this);
 		switch (state)
 		{
 			case HeaderAdapter.PINNED_HEADER_GONE:
@@ -210,12 +216,15 @@ public class SectionListView extends ListView implements OnScrollListener
 			{
 				isTopHeaderVisible = true;
 
-				View firstView = getChildAt(0);
-				if (firstView != null)
+				int nextSection = mAdapter.getNextSectionRelativePosition(
+						firstVisibleItem, this);
+				View nextHeader = getChildAt(nextSection);
+				if (nextHeader != null)
 				{
 
-					mHeaderHeight = firstView.getHeight();
-					int y = firstView.getTop();
+					int bottom = nextHeader.getTop();
+
+					int y = bottom - mHeaderHeight;
 
 					if (mTopHeaderView.getTop() != mHeaderPaddingTop + y)
 					{

@@ -273,20 +273,37 @@ public abstract class SectionAdapter<T extends Item> extends BaseAdapter
 	}
 
 	@Override
-	public int getTopHeaderState(int firstVisiblePosition)
+	public int getTopHeaderState(int firstVisiblePosition, int headerHeight,
+			ListView listView)
 	{
 		int state = 0;
 
 		int currentSection = getSectionForPosition(firstVisiblePosition);
 		int nextSectionPostition = getPositionForSection(currentSection + 1);
 
-		if (getCount() <= 0)
+		// Log.i(TAG, "firstVisiblePosition: " + firstVisiblePosition);
+		// Log.i(TAG, "nextSectionPostition: " + nextSectionPostition);
+
+		View nextHeader = null;
+		int nextSectionTop = 0;
+
+		if (nextSectionPostition >= firstVisiblePosition)
 		{
-			state = PINNED_HEADER_GONE;
+			nextHeader = listView.getChildAt(nextSectionPostition
+					- firstVisiblePosition);
+			nextSectionTop = nextHeader.getTop();
+			// Log.i(TAG, "State: topHeader: Height: " + headerHeight);
+			// Log.i(TAG, "State: nextHeader: Top: " + nextHeader.getTop());
 		}
-		else if (nextSectionPostition == firstVisiblePosition + 1)
+
+		if (null != nextHeader && nextSectionTop <= headerHeight)
 		{
 			state = PINNED_HEADER_PUSHED_UP;
+
+		}
+		else if (getCount() < 0)
+		{
+			state = PINNED_HEADER_GONE;
 		}
 		else
 		{
@@ -294,5 +311,22 @@ public abstract class SectionAdapter<T extends Item> extends BaseAdapter
 		}
 
 		return state;
+	}
+
+	@Override
+	public int getNextSectionRelativePosition(int firstVisiblePosition,
+			ListView listView)
+	{
+		int relativePosition = -1;
+
+		int currentSection = getSectionForPosition(firstVisiblePosition);
+		int nextSectionPostition = getPositionForSection(currentSection + 1);
+
+		if (nextSectionPostition >= firstVisiblePosition)
+		{
+			relativePosition = nextSectionPostition - firstVisiblePosition;
+		}
+
+		return relativePosition;
 	}
 }

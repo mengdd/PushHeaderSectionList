@@ -46,6 +46,9 @@ public class MyAdapter extends SectionAdapter<ConcreteItem>
 		{
 			TextView mTextView = (TextView) view.findViewById(R.id.header);
 			mTextView.setText(item.getmText());
+			
+			TextView mTextView2 = (TextView) view.findViewById(R.id.sub_header);
+			mTextView2.setText("subheader: " + item.getmText());
 		}
 
 	}
@@ -65,6 +68,9 @@ public class MyAdapter extends SectionAdapter<ConcreteItem>
 		{
 			TextView mTextView = (TextView) view.findViewById(R.id.text);
 			mTextView.setText(item.getmText());
+			
+			TextView mTextView2 = (TextView) view.findViewById(R.id.text2);
+			mTextView2.setText(item.getmText() + " text2");
 		}
 
 	}
