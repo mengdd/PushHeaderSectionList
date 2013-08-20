@@ -16,16 +16,14 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 
-public class TestActivity extends Activity
-{
+public class TestActivity extends Activity {
 
 	private SectionListView mListView = null;
 	private MyAdapter mAdapter = null;
 	private List<ConcreteItem> mItems = null;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState)
-	{
+	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_test_sample3);
 
@@ -37,28 +35,23 @@ public class TestActivity extends Activity
 		mListView.setAdapter(mAdapter);
 	}
 
-	private List<ConcreteItem> generateItems()
-	{
+	private List<ConcreteItem> generateItems() {
 		List<ConcreteItem> items = new ArrayList<ConcreteItem>();
 
 		items.add(new ConcreteItem(ItemType.Header, "header1"));
-		for (int i = 0; i < 10; ++i)
-		{
+		for (int i = 0; i < 10; ++i) {
 			items.add(new ConcreteItem(ItemType.Content, "content1" + i));
 		}
 		items.add(new ConcreteItem(ItemType.Header, "header2"));
-		for (int i = 0; i < 10; ++i)
-		{
+		for (int i = 0; i < 10; ++i) {
 			items.add(new ConcreteItem(ItemType.Content, "content2" + i));
 		}
 		items.add(new ConcreteItem(ItemType.Header, "header3"));
-		for (int i = 0; i < 10; ++i)
-		{
+		for (int i = 0; i < 10; ++i) {
 			items.add(new ConcreteItem(ItemType.Content, "content3" + i));
 		}
 		items.add(new ConcreteItem(ItemType.Header, "header4"));
-		for (int i = 0; i < 10; ++i)
-		{
+		for (int i = 0; i < 10; ++i) {
 			items.add(new ConcreteItem(ItemType.Content, "content4" + i));
 		}
 		return items;

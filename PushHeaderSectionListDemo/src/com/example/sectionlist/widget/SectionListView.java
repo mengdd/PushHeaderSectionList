@@ -20,13 +20,11 @@ import android.widget.ListView;
  * @author Meng Dandan
  * 
  */
-public class SectionListView extends ListView implements OnScrollListener
-{
+public class SectionListView extends ListView implements OnScrollListener {
 
 	private static final String TAG = "ListView";
 
-	public interface HeaderAdapter
-	{
+	public interface HeaderAdapter {
 
 		public static final int PINNED_HEADER_GONE = 0;
 
@@ -55,40 +53,34 @@ public class SectionListView extends ListView implements OnScrollListener
 	private HeaderAdapter mAdapter = null;
 	private OnScrollListener mOnScrollListener;
 
-	public SectionListView(Context context, AttributeSet attrs, int defStyle)
-	{
+	public SectionListView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 		init();
 	}
 
-	public SectionListView(Context context, AttributeSet attrs)
-	{
+	public SectionListView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		init();
 	}
 
-	public SectionListView(Context context)
-	{
+	public SectionListView(Context context) {
 		super(context);
 		init();
 	}
 
-	private void init()
-	{
+	private void init() {
 		super.setOnScrollListener(this);
 
 	}
 
 	@Override
-	protected void onLayout(boolean changed, int l, int t, int r, int b)
-	{
+	protected void onLayout(boolean changed, int l, int t, int r, int b) {
 		super.onLayout(changed, l, t, r, b);
 		Log.w(TAG, "onLayout");
 		mHeaderPaddingLeft = getPaddingLeft();
 		mHeaderPaddingTop = getPaddingTop();
 		mHeaderWidth = r - l - mHeaderPaddingLeft - getPaddingRight();
-		if (null != mTopHeaderView)
-		{
+		if (null != mTopHeaderView) {
 			Log.w(TAG, "layout in onLayout");
 			mTopHeaderView.layout(mHeaderPaddingLeft, mHeaderPaddingTop,
 					mHeaderWidth, mHeaderHeight);
@@ -103,12 +95,10 @@ public class SectionListView extends ListView implements OnScrollListener
 	}
 
 	@Override
-	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
-	{
+	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 		Log.i(TAG, "onMeasure");
-		if (mTopHeaderView != null)
-		{
+		if (mTopHeaderView != null) {
 			Log.i(TAG, "onMeasure -- mHeadView != null");
 			measureChild(mTopHeaderView, widthMeasureSpec, heightMeasureSpec);
 			mHeaderWidth = mTopHeaderView.getMeasuredWidth();
@@ -121,25 +111,21 @@ public class SectionListView extends ListView implements OnScrollListener
 	}
 
 	@Override
-	public void setAdapter(ListAdapter adapter)
-	{
+	public void setAdapter(ListAdapter adapter) {
 		mAdapter = (HeaderAdapter) adapter;
 		super.setAdapter(adapter);
 	}
 
 	@Override
-	public void setOnScrollListener(OnScrollListener listener)
-	{
+	public void setOnScrollListener(OnScrollListener listener) {
 		mOnScrollListener = listener;
 
 		super.setOnScrollListener(this);
 	}
 
 	@Override
-	public void onScrollStateChanged(AbsListView view, int scrollState)
-	{
-		if (null != mOnScrollListener)
-		{
+	public void onScrollStateChanged(AbsListView view, int scrollState) {
+		if (null != mOnScrollListener) {
 			mOnScrollListener.onScrollStateChanged(view, scrollState);
 		}
 
@@ -147,10 +133,8 @@ public class SectionListView extends ListView implements OnScrollListener
 
 	@Override
 	public void onScroll(AbsListView view, int firstVisibleItem,
-			int visibleItemCount, int totalItemCount)
-	{
-		if (null != mAdapter)
-		{
+			int visibleItemCount, int totalItemCount) {
+		if (null != mAdapter) {
 			// get view
 			mTopHeaderView = mAdapter.getTopHeaderView(mTopHeaderView,
 					firstVisibleItem, this);
@@ -163,8 +147,7 @@ public class SectionListView extends ListView implements OnScrollListener
 
 		}
 
-		if (null != mOnScrollListener)
-		{
+		if (null != mOnScrollListener) {
 			mOnScrollListener.onScroll(view, firstVisibleItem,
 					visibleItemCount, totalItemCount);
 		}
@@ -172,39 +155,31 @@ public class SectionListView extends ListView implements OnScrollListener
 	}
 
 	@Override
-	protected void dispatchDraw(Canvas canvas)
-	{
+	protected void dispatchDraw(Canvas canvas) {
 		super.dispatchDraw(canvas);
-		if (isTopHeaderVisible && null != mTopHeaderView)
-		{
+		if (isTopHeaderVisible && null != mTopHeaderView) {
 			// Log.i(TAG, "drawTopHeader: " + +mHeaderHeight+ ", " +
 			// mHeaderHeight);
 			drawChild(canvas, mTopHeaderView, getDrawingTime());
 		}
 	}
 
-	private void configureTopHeaderView(int firstVisibleItem)
-	{
-		if (mTopHeaderView == null)
-		{
+	private void configureTopHeaderView(int firstVisibleItem) {
+		if (mTopHeaderView == null) {
 			return;
 		}
 		// get state
 		int state = mAdapter.getTopHeaderState(firstVisibleItem, mHeaderHeight,
 				this);
-		switch (state)
-		{
-			case HeaderAdapter.PINNED_HEADER_GONE:
-			{
+		switch (state) {
+			case HeaderAdapter.PINNED_HEADER_GONE: {
 				isTopHeaderVisible = false;
 				break;
 			}
 
-			case HeaderAdapter.PINNED_HEADER_VISIBLE:
-			{
+			case HeaderAdapter.PINNED_HEADER_VISIBLE: {
 				isTopHeaderVisible = true;
-				if (mTopHeaderView.getTop() != mHeaderPaddingTop)
-				{
+				if (mTopHeaderView.getTop() != mHeaderPaddingTop) {
 					Log.w(TAG, "layout in Visible");
 					mTopHeaderView.layout(mHeaderPaddingLeft,
 							mHeaderPaddingTop, mHeaderWidth, mHeaderHeight);
@@ -212,22 +187,19 @@ public class SectionListView extends ListView implements OnScrollListener
 				break;
 			}
 
-			case HeaderAdapter.PINNED_HEADER_PUSHED_UP:
-			{
+			case HeaderAdapter.PINNED_HEADER_PUSHED_UP: {
 				isTopHeaderVisible = true;
 
 				int nextSection = mAdapter.getNextSectionRelativePosition(
 						firstVisibleItem, this);
 				View nextHeader = getChildAt(nextSection);
-				if (nextHeader != null)
-				{
+				if (nextHeader != null) {
 
 					int bottom = nextHeader.getTop();
 
 					int y = bottom - mHeaderHeight;
 
-					if (mTopHeaderView.getTop() != mHeaderPaddingTop + y)
-					{
+					if (mTopHeaderView.getTop() != mHeaderPaddingTop + y) {
 
 						Log.w(TAG, "layout in Push up");
 						mTopHeaderView.layout(mHeaderPaddingLeft,
